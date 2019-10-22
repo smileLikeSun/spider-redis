@@ -8,12 +8,9 @@
 
 主要内容有：
 
-1. 如何去写一个分布式爬虫
+## 1. 如何去写一个分布式爬虫
 
-首先创建一个普通的爬虫，在保证此爬虫能正常运行的基础上进行修改，然后成为分布式爬虫。我的项目是在linux上 redis 数据库存储分配 requests，我写的是 bilibili 评论抓取，项目路径如下：
-
-
-
+首先创建一个普通的爬虫，在保证此爬虫能正常运行的基础上进行修改，然后成为分布式爬虫。我的项目是在linux上 redis 数据库存储分配 requests，我写的是 bilibili 评论抓取。
 a. 将 spiders --> bilibili.py 继承类 由 scrapy.Spider 改为 RedisSpider 。
 
 注释掉： "allowed_domains"　　"start_urls" 
@@ -49,12 +46,14 @@ ITEM_PIPELINES = {
    'spider_parallel.pipelines.SpiderParallelPipeline': 300,
    'scrapy_redis.pipelines.RedisPipeline': 400
 }
-2. 运行爬虫的顺序《此坑最深》
+
+## 2. 运行爬虫的顺序《此坑最深》
 
 a. 先进入 linux 中 redis 数据库
 
 redis-cli
 auth 123456
+
 b. 服务器端运行spider：
 
 scrapy crawl bilibili
@@ -71,9 +70,3 @@ scrapy crawl bilibili
 顺序不对其中一个会一直处于等待监听的状态。还有就是我想让 两个spiders-->bilibili 中的 name 值不同，以此区分不同的评论是哪个爬虫抓取的。不行，一定要相同。我的区分就是服务器端爬虫存储在服务器端的mongodb数据库中，windows中爬虫就存储在windows中的mongodb数据库中。存储在同一个数据库中也是可以的。区分时记录爬虫类，写 __init__ () 函数继承父类等内容。
 
 没问题就可以看到两个爬虫在共同抓取执行了。
-
-项目已上传至 git 。
-
-原创不易，尊重版权。转载请注明出处：http://www.cnblogs.com/xsmile/
-
- 
