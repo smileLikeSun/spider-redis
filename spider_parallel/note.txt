@@ -1,0 +1,18 @@
+
+更新 ip 地址
+
+linux server:
+	# 文件目录
+	/usr/local/spider_parallel/spider_parallel/spiders
+
+	# 命令
+	redis-cli
+	auth 123456
+	lpush bilibili:start_urls https://api.bilibili.com/x/v2/reply?pn=1&type=1&oid=329437&sort=2
+
+
+
+
+
+window
+	scrapy crawl bilibili
