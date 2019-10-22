@@ -30,7 +30,11 @@ def get_ips():
     }
     url_bilibili = 'https://api.bilibili.com/x/v2/reply?pn=1&type=1&oid=67456873&sort=2'
     url_proxy = 'https://www.xicidaili.com/wn/{}'
-    with open('../proxy.txt', 'w', encoding='utf-8') as fi:
+    process_totle = 200
+    process_count = 1
+    process_line = ''
+    print('[{:-<20}]'.format(process_line))
+    with open(f'../proxy.txt', 'w', encoding='utf-8') as fi:
         for i in range(1, 3):
             url_proxy = url_proxy.format(i)
             content = requests.get(url_proxy, headers=headers)
@@ -53,6 +57,11 @@ def get_ips():
                             fi.write('https://{}\n'.format(host))
                     except Exception:
                         print('the ip:{} not to use'.format(host))
+                    finally:
+                        if process_count % 10 == 0:
+                            process_line += '*'
+                            print('[{:-<20}]'.format(process_line))
+                        process_count += 1
 
 
 if __name__ == '__main__':
